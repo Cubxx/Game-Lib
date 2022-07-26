@@ -54,7 +54,7 @@ function Player(x, y) {
     this.crash = function (i, dist) {
         if (this.lives > 0) {
             if (distance(this.element, i.element) < dist) {
-                this.lives++;
+                this.lives--;
                 i.lives = 0;
             }
         }
