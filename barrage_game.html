@@ -68,7 +68,7 @@
             dd = 0,
             isfire = false,
             isbomb = false,
-            int_time = 2900,
+            exe_int_time = 0,
             player_bullets = [],
             boss_bullets = [],
             boss_list = [],
@@ -115,7 +115,9 @@
         var Stop = setInterval(function () {
             document.getElementsByName('panel')[0].innerHTML =
                 "得分：" + player.score + "<br>生命：" + player.lives + "<br>开大：" + player.bombs;
-            if (boss_bullets.length < 30 && boss_list.length < 1) { //boss生成
+            exe_int_time++;
+            if (exe_int_time >= 120 && boss_bullets.length < 30 && boss_list.length < 1) { //boss生成
+                exe_int_time = 0;
                 var boss = new Boss([Math.random() * 490
                     , -40], [0, Math.random() * 5 + 1]);
                 boss.draw();
