@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href=".\pic\close.png">
+    <title>Barrage Game</title>
+    <style>
+        body {
+            margin: auto;
+            border: 10px solid #000;
+            width: 530px;
+            height: 530px;
+            position: relative;
+            background-color: cornsilk;
+        }
+
+        #panel {
+            float: left;
+        }
+
+        #player {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border: 8px solid #88888888;
+            /* background-color: #fff; */
+        }
+
+        .boss {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #000;
+            opacity: 1;
+        }
+
+        .player_bullets {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #808;
+            opacity: 0.5;
+        }
+
+        .boss_bullets {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div name='panel'>
+    </div>
+    <script src=".\Player.js"></script>
+    <script src=".\Boss.js"></script>
+    <script src=".\Bullet.js"></script>
+    <script>
+        var spd = 4.5,
+            dl = 0,
+            dr = 0,
+            dt = 0,
+            dd = 0,
+            isfire = false,
+            isbomb = false,
+            int_time = 2900,
+            player_bullets = [],
+            boss_bullets = [],
+            boss_list = [],
+            body_cl = document.body.clientLeft,
+            body_ct = document.body.clientTop,
+            body_ch = document.body.clientHeight,
+            body_cw = document.body.clientWidth;
+
+        var position = function () { //obj.element []位移
+            var obj_elm = arguments[0], pos = arguments[1] || [0, 0];
+            return [parseInt(obj_elm.style.left) + obj_elm.offsetWidth / 2 + pos[0]
+                , parseInt(obj_elm.style.top) + obj_elm.offsetHeight / 2 + pos[1]];
+        }
+        var distance = function (elm_1, elm_2) {
+            var pos_1 = position(elm_1);
+            var pos_2 = position(elm_2);
+            var x = pos_1[0] - pos_2[0];
+            var y = pos_1[1] - pos_2[1];
+            return Math.sqrt(x * x + y * y)
+        }
+        var update = function () { //list func有生命i func所有i
+            var survive = [];
+            for (i of arguments[0]) {
+                if (arguments[2] != undefined) { arguments[2](); }
+                if (i.lives > 0) {
+                    survive.push(i);
+                    arguments[1]();
+                } else { i.element.remove(); }
+            }
+            return survive;
+        }
+        var timer = function (int_time, time_lag, func) { //定时执行
+            int_time++;
+            if (int_time > time_lag) {
+                int_time = 0;
+                func();
+            }
+            return int_time;
+        }
+
+        //主程序
+        var player = new Player(255, 450);
+        player.draw();
+        var Stop = setInterval(function () {
+            document.getElementsByName('panel')[0].innerHTML =
+                "得分：" + player.score + "<br>生命：" + player.lives + "<br>开大：" + player.bombs;
+            if (boss_bullets.length < 30 && boss_list.length < 1) { //boss生成
+                var boss = new Boss([Math.random() * 490
+                    , -40], [0, Math.random() * 5 + 1]);
+                boss.draw();
+                boss_list.push(boss);
+            };
+
+            player.move(spd * dr, spd * dl, spd * dd, spd * dt);
+            player.fire(isfire); //bullet初位置 初速度
+            player.fire_bomb(isbomb);
+
+            player_bullets = update(player_bullets, function () {
+                i.move_track(boss_list); //player_bullet移动
+                var bullet = i;
+                boss_list = update(boss_list, function () { }, function () {
+                    i.crash(bullet); //bullet撞boss
+                });
+            });
+            boss_list = update(boss_list, function () {
+                i.fire();
+                i.element.style.opacity = i.lives / 20;
+                player.crash(i, 20 + 2); //boss撞player
+            }, function () {
+                i.move(); //boss移动
+            });
+            boss_bullets = update(boss_bullets, function () {
+                i.move_track([], 'reflect'); //boss_bullet移动
+                player.crash(i, 5 + 2); //bullet撞player
+            });
+
+            if (player.lives == 0) {
+                // end of game
+                alert("死了啦，都是你害的啦，拜托");
+                clearInterval(Stop);
+                // window.location.reload();
+            }
+        }, 1000 / 60);
+
+        document.onkeydown = function (e) {
+            // console.log(e)
+            switch (e.keyCode) {
+                case 37: dl = 1; break;
+                case 39: dr = 1; break;
+                case 38: dt = 1; break;
+                case 40: dd = 1; break;
+                case 16: spd = 2; break; //shift
+                case 13: dl = 0; dr = 0; dt = 0; dd = 0; spd = 4.5; break; //enter
+                case 90: isfire = true; break; //z
+                case 88: isbomb = true; break; //x
+            }
+        }
+        document.onkeyup = function (e) {
+            switch (e.keyCode) {
+                case 37: dl = 0; break;
+                case 39: dr = 0; break;
+                case 38: dt = 0; break;
+                case 40: dd = 0; break;
+                case 16: spd = 4.5; break;
+                case 90: isfire = false; break;
+                case 88: isbomb = false; break;
+            }
+        }
+        var box = player.element;
+        box.onmousedown = function (e) { //拖拽事件
+            var dx = box.offsetLeft - e.clientX - 10;
+            var dy = box.offsetTop - e.clientY - 10;
+            document.onmousemove = function (e) {
+                box.style.left = dx + e.clientX + 'px';
+                box.style.top = dy + e.clientY + 'px';
+            }
+            document.onmouseup = function () {
+                document.onmousemove = null;
+            }
+        }
+        document.oncontextmenu = function (e) { //右键定位
+            box.style.left = e.layerX - box.offsetWidth + 'px';
+            box.style.top = e.layerY - box.offsetHeight + 'px';
+            console.log(e)
+            return false;
+        }
+    </script>
+</body>
+
+</html>
