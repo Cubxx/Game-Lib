@@ -1,0 +1,83 @@
+body {
+    margin: auto;
+    border: 10px solid #000;
+    width: 530px;
+    height: 530px;
+    position: relative;
+    background-color: cornsilk;
+}
+
+img {
+    position: absolute;
+    width: 530px;
+    top: 75px;
+    z-index: 2;
+}
+
+div[name] {
+    position: absolute;
+    height: 20px;
+    width: 530px;
+    background-color: #00000018;
+}
+
+#panel {
+    position: absolute;
+    height: 40px;
+    /* top: 20px; */
+    font: bold 17px/20px 微软雅黑;
+}
+
+#pause {
+    position: absolute;
+    z-index: 1;
+    width: 550px;
+    height: 550px;
+    left: -10px;
+    top: -10px;
+    color: beige;
+    font: bold 40px/70px 微软雅黑;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* display: none; */
+}
+
+
+#player {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border: 8px solid #b54747;
+    /* background-color: #fff; */
+    opacity: 0.8;
+}
+
+.boss {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    opacity: 1;
+}
+
+.bullet_boss,
+.bullet_player,
+.live_res {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+}
+
+.bullet_player {
+    background-color: #808;
+    opacity: 0.5;
+}
+
+.bullet_boss {
+    background-color: #000;
+}
+
+.live_res {
+    background-color: rgb(0, 136, 88);
+    opacity: 0.5;
+}

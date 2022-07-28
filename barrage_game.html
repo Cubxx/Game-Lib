@@ -7,75 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href=".\pic\close.png">
     <title>Barrage Game</title>
-    <style>
-        body {
-            margin: auto;
-            border: 10px solid #000;
-            width: 530px;
-            height: 530px;
-            position: relative;
-            background-color: cornsilk;
-        }
-
-        #panel {
-            float: left;
-        }
-
-        #player {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border: 8px solid #88888888;
-            /* background-color: #fff; */
-        }
-
-        .boss {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background-color: #000;
-            opacity: 1;
-        }
-
-        .player_bullets {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #808;
-            opacity: 0.5;
-        }
-
-        .boss_bullets {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="./barrage_game.css">
 </head>
 
 <body>
-    <div name='panel'>
+    <div id='panel'>
+        <div name="message"></div>
+        <div name="message"></div>
+        <div name="message"></div>
+    </div>
+    <div id="pause">
+        <br>Space - 开始/继续
+        <br>Z - 射击
+        <br>X - 开大
+        <br>Shift - 低速模式
+        <br>方向键 - 移动
+        <br>F5 - 重开
     </div>
     <script src=".\Player.js"></script>
-    <script src=".\Boss.js"></script>
     <script src=".\Bullet.js"></script>
+    <script src=".\Boss.js"></script>
+    <script src=".\Maker.js"></script>
+    <script src=".\Stage.js"></script>
     <script>
-        var spd = 4.5,
+        var Stop, stage,
+            spd = 4.5,
             dl = 0,
             dr = 0,
             dt = 0,
             dd = 0,
             isfire = false,
             isbomb = false,
+            ispause = true,
             exe_int_time = 0,
             player_bullets = [],
             boss_bullets = [],
             boss_list = [],
+            live_res = [],
             body_cl = document.body.clientLeft,
             body_ct = document.body.clientTop,
             body_ch = document.body.clientHeight,
-            body_cw = document.body.clientWidth;
+            body_cw = document.body.clientWidth,
+            pause_elm = document.getElementById('pause'),
+            panel_elm = document.getElementById('panel').children[0],
+            invincible_time_elm = document.getElementById('panel').children[1],
+            bomb_time_elm = document.getElementById('panel').children[2];
+        invincible_time_elm.style.top = 20 + 'px ';
+        bomb_time_elm.style.top = 40 + 'px ';
 
         var position = function () { //obj.element []位移
             var obj_elm = arguments[0], pos = arguments[1] || [0, 0];
@@ -89,14 +67,23 @@
             var y = pos_1[1] - pos_2[1];
             return Math.sqrt(x * x + y * y)
         }
+        var degree = function (elm_1, elm_2) {
+            var p_1 = arguments[3] || [0, 0],
+                p_2 = arguments[2] || [0, 0],
+                pos_1 = position(elm_1, p_1),
+                pos_2 = position(elm_2, p_2),
+                x = pos_1[0] - pos_2[0],
+                y = pos_1[1] - pos_2[1];
+            return Math.atan2(y, x)
+        }
         var update = function () { //list func有生命i func所有i
             var survive = [];
             for (i of arguments[0]) {
-                if (arguments[2] != undefined) { arguments[2](); }
+                if (arguments[2] != undefined) { arguments[2]() }
                 if (i.lives > 0) {
                     survive.push(i);
                     arguments[1]();
-                } else { i.element.remove(); }
+                } else { i.element.remove() }
             }
             return survive;
         }
@@ -110,50 +97,89 @@
         }
 
         //主程序
-        var player = new Player(255, 450);
+        var player = new Player(255, 450),
+            bullet_player_maker = new Maker('bullet_player'),
+            bullet_boss_maker = new Maker('bullet_boss'),
+            bullet_boss_maker2 = new Maker('bullet_boss'),
+            boss_maker = new Maker('boss'),
+            live_res_maker = new Maker('live_res');
         player.draw();
-        var Stop = setInterval(function () {
-            document.getElementsByName('panel')[0].innerHTML =
-                "得分：" + player.score + "<br>生命：" + player.lives + "<br>开大：" + player.bombs;
-            exe_int_time++;
-            if (exe_int_time >= 120 && boss_bullets.length < 30 && boss_list.length < 1) { //boss生成
-                exe_int_time = 0;
-                var boss = new Boss([Math.random() * 490
-                    , -40], [0, Math.random() * 5 + 1]);
-                boss.draw();
-                boss_list.push(boss);
-            };
 
+        var main = function () {
+            //信息面版
+            panel_elm.innerHTML =
+                "得分：" + parseInt(player.score) +
+                "<br>生命：" + parseInt(player.lives) +
+                "<br>开大：" + player.bombs;
+            invincible_time_elm.style.width = player.invincible_time / 180 * 530 + 'px ';
+            if (player.invincible_time < 180) { player.invincible_time++ }
+            //BAD END
+            if (player.lives <= 0) {
+                // alert("死了啦，都是你害的啦，拜托");
+                ispause = !ispause;
+                var img = document.createElement('img');
+                img.src = "./pic/bad end.jfif";
+                document.body.appendChild(img);
+            }
+            //游戏关卡
+            if (player.score >= 1050 && boss_bullets.length == 0) {//HAPPY END
+                ispause = !ispause;
+                var img = document.createElement('img');
+                img.src = "./pic/happy end.jfif";
+                document.body.appendChild(img);
+                exe_int_time = timer(exe_int_time, 120, function () {
+                    clearInterval(Stop)
+                })
+            } else if (player.score > 990) {
+                stage = new Stage(6);
+            } else if (player.score > 950) {
+                stage = new Stage(5);
+            } else if (player.score > 900) {
+                stage = new Stage(4);
+            } else if (player.score > 600) {
+                stage = new Stage(3);
+            } else if (player.score > 400) {
+                stage = new Stage(2);
+            } else if (player.score >= 0) {
+                stage = new Stage(1);
+            }
+            //boss生成
+            stage.boss_generate();
+            //player方法
             player.move(spd * dr, spd * dl, spd * dd, spd * dt);
-            player.fire(isfire); //bullet初位置 初速度
+            player.fire(isfire);
             player.fire_bomb(isbomb);
-
+            //player_bullets方法
             player_bullets = update(player_bullets, function () {
-                i.move_track(boss_list); //player_bullet移动
+                i.move();
                 var bullet = i;
                 boss_list = update(boss_list, function () { }, function () {
-                    i.crash(bullet); //bullet撞boss
+                    i.crash(bullet);
                 });
             });
+            //boss方法
             boss_list = update(boss_list, function () {
-                i.fire();
-                i.element.style.opacity = i.lives / 20;
-                player.crash(i, 20 + 2); //boss撞player
+                // i.fire();
+                stage.boss_fire(i);
+                i.element.style.opacity = i.lives / stage.boss_lives;
+                player.crash(i, 20 + 2);
             }, function () {
-                i.move(); //boss移动
+                i.move();
             });
+            //boss_bullets方法
             boss_bullets = update(boss_bullets, function () {
-                i.move_track([], 'reflect'); //boss_bullet移动
-                player.crash(i, 5 + 2); //bullet撞player
+                stage.bullet_move(i);
+                player.crash(i, 5 + 2);
             });
+            //live_res方法
+            live_res = update(live_res, function () {
+                i.move();
+                player.crash(i, 5 + 2);
+            })
 
-            if (player.lives == 0) {
-                // end of game
-                alert("死了啦，都是你害的啦，拜托");
-                clearInterval(Stop);
-                // window.location.reload();
-            }
-        }, 1000 / 60);
+            if (ispause) { clearInterval(Stop) }
+            pause_elm.style.display = ispause ? 'block' : 'none';
+        }
 
         document.onkeydown = function (e) {
             // console.log(e)
@@ -163,9 +189,9 @@
                 case 38: dt = 1; break;
                 case 40: dd = 1; break;
                 case 16: spd = 2; break; //shift
-                case 13: dl = 0; dr = 0; dt = 0; dd = 0; spd = 4.5; break; //enter
                 case 90: isfire = true; break; //z
                 case 88: isbomb = true; break; //x
+                case 32: ispause = !ispause; break; //space
             }
         }
         document.onkeyup = function (e) {
@@ -177,9 +203,10 @@
                 case 16: spd = 4.5; break;
                 case 90: isfire = false; break;
                 case 88: isbomb = false; break;
+                case 32: Stop = ispause ? Stop : setInterval('main()', 1000 / 60);
             }
         }
-        var box = player.element;
+        /* var box = player.element;
         box.onmousedown = function (e) { //拖拽事件
             var dx = box.offsetLeft - e.clientX - 10;
             var dy = box.offsetTop - e.clientY - 10;
@@ -196,7 +223,7 @@
             box.style.top = e.layerY - box.offsetHeight + 'px';
             console.log(e)
             return false;
-        }
+        } */
     </script>
 </body>
 
