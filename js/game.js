@@ -81,12 +81,22 @@ var Stop, stage,
 
 invincible_time_elm.style.top = 20 + 'px ';
 bomb_time_elm.style.top = 40 + 'px ';
+
+//音效加载
 if (confirm('是否打开音效？')) {
-    var audio_fx = new Audio();
-    audio_fx.volume = 0.1;
+    var audio_fx_u = new Audio();
+    audio_fx_u.volume = 0.1;
+    audio_fx_u.src = './media/u____.aac';
+    var audio_fx_boom = new Audio();
+    audio_fx_boom.volume = 0.1;
+    audio_fx_boom.src = './media/boom.aac';
 }
-var audio_end = new Audio();
-audio_end.volume = 0.1;
+var audio_end_bad = new Audio();
+audio_end_bad.volume = 0.1;
+audio_end_bad.src = "./media/死了啦都你害得啦.aac";
+var audio_end_happy = new Audio();
+audio_end_happy.volume = 0.1;
+audio_end_happy.src = "./media/Never Gonna Give You Up.aac";
 
 //主程序
 var player = new Player(255, 450),
@@ -109,8 +119,7 @@ var main = function () {
     if (player.lives < 1) {
         ispause = !ispause;
         img.src = "./media/bad end.jfif";
-        audio_end.src = "./media/死了啦都你害得啦.aac";
-        audio_end.play();
+        audio_end_bad.play();
     }
     //游戏关卡
     if (player.score >= 1000 && boss_bullets.length == 0) {
@@ -118,8 +127,7 @@ var main = function () {
         pause_elm.innerHTML = 'Rick恭喜你通关'
         ispause = !ispause;
         img.src = "./media/happy end.gif";
-        audio_end.src = "./media/Never Gonna Give You Up.aac"
-        audio_end.play();
+        audio_end_happy.play();
     } else if (boss_list.length == 0) {
         if (player.score >= 960) { stage = new Stage(6); }
         else if (player.score >= 920) { stage = new Stage(5); }
