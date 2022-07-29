@@ -77,7 +77,8 @@ var Stop, stage,
     panel_elm = document.getElementById('panel').children[0],
     invincible_time_elm = document.getElementById('panel').children[1],
     bomb_time_elm = document.getElementById('panel').children[2],
-    img = document.querySelector('img');
+    img_bad = document.querySelectorAll('img')[0];
+    img_happy = document.querySelectorAll('img')[1];
 
 invincible_time_elm.style.top = 20 + 'px ';
 bomb_time_elm.style.top = 40 + 'px ';
@@ -90,6 +91,9 @@ if (confirm('是否打开音效？')) {
     var audio_fx_boom = new Audio();
     audio_fx_boom.volume = 0.1;
     audio_fx_boom.src = './media/boom.aac';
+    var audio_fx_ayo = new Audio();
+    audio_fx_ayo.volume = 0.1;
+    audio_fx_ayo.src = './media/ayo.aac';
 }
 var audio_end_bad = new Audio();
 audio_end_bad.volume = 0.1;
@@ -118,7 +122,7 @@ var main = function () {
     //BAD END
     if (player.lives < 1) {
         ispause = !ispause;
-        img.src = "./media/bad end.jfif";
+        img_bad.style.display='block';
         audio_end_bad.play();
     }
     //游戏关卡
@@ -126,7 +130,7 @@ var main = function () {
         // HAPPY END
         pause_elm.innerHTML = 'Rick恭喜你通关'
         ispause = !ispause;
-        img.src = "./media/happy end.gif";
+        img_happy.style.display='block';
         audio_end_happy.play();
     } else if (boss_list.length == 0) {
         if (player.score >= 960) { stage = new Stage(6); }

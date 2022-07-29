@@ -69,6 +69,7 @@ function Player(x, y) {
                     this.bombs += 2;
                     bombs_reduce -= 2;
                 }
+                if (audio_fx_ayo) { audio_fx_ayo.play(); }
             }
         }
     }
