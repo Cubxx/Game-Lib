@@ -45,10 +45,7 @@ function Player(x, y) {
             bomb_time = 0;
             this.invincible_time = 0;
             bombs--;
-            if (audio_fx) {
-                audio_fx.src = './media/u____.aac';
-                audio_fx.play();
-            }
+            if (audio_fx_u) { audio_fx_u.play(); }
         }
 
         this.bombs = bombs;
@@ -123,10 +120,7 @@ function Boss(pos_initial, v_initial, type, move_type, lives) {
                 live_res_maker.generator(this, 999, '', 'track', [0, 2], [0, -15]);
                 live_res_maker.generator(this, 999, '', 'track', [0, 2], [15, 0]);
                 live_res_maker.generator(this, 999, '', 'track', [0, 2], [-15, 0]);
-                if (audio_fx) {
-                    audio_fx.src = './media/boom.aac';
-                    audio_fx.play();
-                }
+                if (audio_fx_boom) { audio_fx_boom.play(); }
             }
         }
     }
