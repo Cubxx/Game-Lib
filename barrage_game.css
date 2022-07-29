@@ -7,7 +7,8 @@ body {
     background-color: cornsilk;
 }
 
-img {
+img,
+audio {
     position: absolute;
     width: 530px;
     top: 75px;
@@ -79,5 +80,5 @@ div[name] {
 
 .live_res {
     background-color: rgb(0, 136, 88);
-    opacity: 0.5;
+    opacity: 0.4;
 }

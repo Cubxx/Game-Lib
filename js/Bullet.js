@@ -67,6 +67,9 @@ function Bullet(pos_initial, v_initial, type, move_type) {
                 dx = v_int * Math.cos(move_num + phase) + Math.cos(angle_i);
                 dy = v_int * Math.sin(move_num + phase) + Math.sin(angle_i);
                 break;
+            case 'gravity':
+                dy += 0.01;
+                break;
             default: break;
         }
 
@@ -83,9 +86,9 @@ function Bullet(pos_initial, v_initial, type, move_type) {
                 if (situation_num > 1) { this.lives = 0 }
                 break;
             case 'gravity':
-                dy += 0.01;
-                if (elm_ot - body_ct >= body_ch) { this.element.style.top = '530px'; dy = -dy; dy -= 0.5; }
-                if (elm_ot <= 0) { this.lives = 0 }
+                dy += 0.05;
+                if (elm_ot - body_ct >= body_ch) { this.element.style.top = '530px'; dy = -dy; dy += 0.5; situation_num++ }
+                if (elm_ot <= 0 || situation_num > 0) { this.lives = 0 }
                 if (elm_ol <= 0 || elm_ol - body_cl >= body_cw) { this.element.style.left = elm_ol <= 0 ? '0px' : '530px'; dx = -dx }
                 break;
             default:
@@ -116,14 +119,3 @@ function Bullet(pos_initial, v_initial, type, move_type) {
         }
     }
 }
-var boss_bullets_elm = document.createElement('div');
-boss_bullets_elm.id = 'bullet_boss_elm';
-document.body.insertBefore(boss_bullets_elm, document.querySelector('script'));
-
-var player_bullets_elm = document.createElement('div');
-player_bullets_elm.id = 'bullet_player_elm';
-document.body.insertBefore(player_bullets_elm, document.querySelector('script'));
-
-var live_res_elm = document.createElement('div');
-live_res_elm.id = 'live_res_elm';
-document.body.insertBefore(live_res_elm, document.querySelector('script'));
