@@ -122,7 +122,7 @@
                 document.body.appendChild(img);
             }
             //游戏关卡
-            if (player.score >= 1050 && boss_bullets.length == 0) {//HAPPY END
+            if (player.score >= 1000 && boss_bullets.length == 0) {//HAPPY END
                 ispause = !ispause;
                 var img = document.createElement('img');
                 img.src = "./pic/happy end.jfif";
@@ -130,16 +130,24 @@
                 exe_int_time = timer(exe_int_time, 120, function () {
                     clearInterval(Stop)
                 })
-            } else if (player.score > 990) {
-                stage = new Stage(6);
-            } else if (player.score > 950) {
-                stage = new Stage(5);
-            } else if (player.score > 900) {
-                stage = new Stage(4);
-            } else if (player.score > 600) {
+            } else if (player.score >= 960) {
+                if (boss_list == 0) {
+                    stage = new Stage(6);
+                }
+            } else if (player.score >= 920) {
+                if (boss_list == 0) {
+                    stage = new Stage(5);
+                }
+            } else if (player.score >= 890) {
+                if (boss_list == 0) {
+                    stage = new Stage(4);
+                }
+            } else if (player.score >= 700) {
                 stage = new Stage(3);
-            } else if (player.score > 400) {
-                stage = new Stage(2);
+            } else if (player.score >= 400) {
+                if (boss_list == 0) {
+                    stage = new Stage(2);
+                }
             } else if (player.score >= 0) {
                 stage = new Stage(1);
             }

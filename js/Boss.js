@@ -29,14 +29,14 @@ function Boss(pos_initial, v_initial, type, move_type, lives) {
     this.crash = function (i) { //遍历player_bullets
         if (distance(this.element, i.element) < 20 + 5) {
             this.lives--;
-            player.score += 0.1;
+            player.score += 0.05;
             i.lives = 0;
             if (this.lives == 0) { //加分 掉资源
                 player.score += 20;
-                live_res_maker.generator(this, 999, '', 'track', [0, 1], [0, 15]);
-                live_res_maker.generator(this, 999, '', 'track', [0, 1], [0, -15]);
-                live_res_maker.generator(this, 999, '', 'track', [0, 1], [15, 0]);
-                live_res_maker.generator(this, 999, '', 'track', [0, 1], [-15, 0]);
+                live_res_maker.generator(this, 999, '', 'track', [0, 2], [0, 15]);
+                live_res_maker.generator(this, 999, '', 'track', [0, 2], [0, -15]);
+                live_res_maker.generator(this, 999, '', 'track', [0, 2], [15, 0]);
+                live_res_maker.generator(this, 999, '', 'track', [0, 2], [-15, 0]);
             }
         }
     }

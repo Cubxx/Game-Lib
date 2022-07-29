@@ -28,7 +28,7 @@ function Player(x, y) {
     this.fire_bomb = function (isbomb) {
         var bombs = this.bombs;
         var differ = Math.floor(this.score / 150) - bombs;  //每100分加bomb
-        if (differ > bombs_reduce && bombs < 9) { bombs++ }
+        if (differ > bombs_reduce && bombs < 5) { bombs++ }
 
         if (bomb_time < 180) { //恢复bomb
             bomb_time++;
@@ -59,7 +59,7 @@ function Player(x, y) {
             if (i.type == 'live_res') { //live_res吸收
                 i.lives = 0;
                 this.score += 0.1;
-                this.lives = this.lives < 9 ? this.lives + 1 / 16 : this.lives;
+                this.lives = this.lives < 5 ? this.lives + 1 / 32 : this.lives;
             } else if (hit_judge) { //boss bullet_boss判定
                 i.lives = 0;
                 this.lives--;

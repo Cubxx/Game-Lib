@@ -3,7 +3,7 @@ function Stage(level) {
         case 1: //自狙击
             this.boss_lives = 10;
             this.boss_generate = function () {
-                if (boss_bullets.length < 30 && boss_list.length < 5) {
+                if (boss_bullets.length < 30 && boss_list.length < 3 && player.score < 400) {
                     boss_maker.generator('', 30, '', ''
                         , [Math.random() * 5 - 2, Math.random() * 2 + 2]
                         , [Math.random() * 490, -70]
@@ -21,7 +21,7 @@ function Stage(level) {
         case 2: //螺旋下坠
             this.boss_lives = 15;
             this.boss_generate = function () {
-                if (boss_bullets.length < 30 && boss_list.length < 1) {
+                if (boss_bullets.length < 30 && boss_list.length < 1 && player.score < 700) {
                     boss_maker.generator('', 30, '', ''
                         , [0, Math.random() * 3 + 4]
                         , [Math.random() * 490, -70]
@@ -37,9 +37,9 @@ function Stage(level) {
             }
             break;
         case 3: //龙纹
-            this.boss_lives = 20;
+            this.boss_lives = 50;
             this.boss_generate = function () {
-                if (boss_bullets.length < 50 && boss_list.length < 3) {
+                if (boss_bullets.length < 30 && boss_list.length < 3 && player.score < 890) {
                     boss_maker.generator('', 15, '', ''
                         , [Math.random() > 0.5 ? 2 : - 2, Math.random() * 1 + 2]
                         , [Math.random() * 490, -70]
@@ -55,9 +55,9 @@ function Stage(level) {
             }
             break;
         case 4: //双圆
-            this.boss_lives = 300+400+500;
+            this.boss_lives = 300;
             this.boss_generate = function () {
-                if (boss_bullets.length < 30 && boss_list.length < 1) {
+                if (boss_bullets.length < 30 && boss_list.length < 1 && player.score < 920) {
                     boss_maker.generator('', 300, '', ''
                         , []//[Math.random() * 5 - 2, Math.random() * 2 + 2]
                         , [255, 150]//[Math.random() * 490, -70]
@@ -75,13 +75,13 @@ function Stage(level) {
         case 5: //开花
             this.boss_lives = 400;
             this.boss_generate = function () {
-                /* if (boss_bullets.length < 30 && boss_list.length < 1) {
+                if (boss_bullets.length < 30 && boss_list.length < 1 && player.score < 960) {
                     boss_maker.generator('', 300, '', ''
                         , []//[Math.random() * 5 - 2, Math.random() * 2 + 2]
                         , [255, 150]//[Math.random() * 490, -70]
                         , '', this.boss_lives
                     );
-                }; */
+                };
             }
             this.boss_fire = function (i) {
                 bullet_boss_maker.generator(i, 180, 'ring', '', [0, 5], '', 5);
@@ -99,13 +99,13 @@ function Stage(level) {
         case 6: //波粒
             this.boss_lives = 500;
             this.boss_generate = function () {
-                /* if (boss_bullets.length < 30 && boss_list.length < 1) {
+                if (boss_bullets.length < 30 && boss_list.length < 1) {
                     boss_maker.generator('', 300, '', ''
                         , []//[Math.random() * 5 - 2, Math.random() * 2 + 2]
                         , [255, 150]//[Math.random() * 490, -70]
                         , '', this.boss_lives
                     );
-                }; */
+                };
             }
             this.boss_fire = function (i) {
                 bullet_boss_maker.generator(i, 3, 'ring', '', [0, 4], '', 4);
