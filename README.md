@@ -40,8 +40,8 @@
   - happy end
   - 我超勇的！
 # 按键操作
-Space 暂停
+Space 暂停  
 Z 射击  
 X 开大  
-Shift 低速模式
+Shift 低速模式  
 方向键 移动
