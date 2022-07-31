@@ -203,7 +203,7 @@ document.onkeyup = function (e) {
         case 32: Stop = ispause ? Stop : setInterval('main()', 1000 / 60);
     }
 }
-/* var box = player.element;
+var box = player.element;
 box.onmousedown = function (e) { //拖拽事件
     var dx = box.offsetLeft - e.clientX - 10;
     var dy = box.offsetTop - e.clientY - 10;
@@ -218,6 +218,6 @@ box.onmousedown = function (e) { //拖拽事件
 document.oncontextmenu = function (e) { //右键定位
     box.style.left = e.layerX - box.offsetWidth + 'px';
     box.style.top = e.layerY - box.offsetHeight + 'px';
-    console.log(e)
+    //console.log(e)
     return false;
-} */
+}
