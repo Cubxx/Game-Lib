@@ -4,10 +4,11 @@ body {
     width: 530px;
     height: 530px;
     position: relative;
+    /* top: 20px; */
     background-color: cornsilk;
 }
 
-img{
+img {
     position: absolute;
     width: 530px;
     top: 75px;
@@ -20,16 +21,11 @@ div[name] {
     height: 20px;
     width: 530px;
     background-color: #00000018;
-}
-
-#panel {
-    position: absolute;
-    height: 40px;
-    /* top: 20px; */
     font: bold 17px/20px 微软雅黑;
 }
 
-#pause {
+#pause,
+#rank {
     position: absolute;
     z-index: 1;
     width: 550px;
@@ -43,6 +39,13 @@ div[name] {
     /* display: none; */
 }
 
+#rank {
+    z-index: 2;
+    top: 540px;
+    height: auto;
+    font: bold 30px/50px 微软雅黑;
+    background-color: rgba(0, 0, 0, 0.85);
+}
 
 #player {
     position: absolute;

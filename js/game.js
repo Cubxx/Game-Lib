@@ -77,11 +77,9 @@ var Stop, stage,
     panel_elm = document.getElementById('panel').children[0],
     invincible_time_elm = document.getElementById('panel').children[1],
     bomb_time_elm = document.getElementById('panel').children[2],
-    img_bad = document.querySelectorAll('img')[0];
+    rank_elm = document.getElementById('rank'),
+    img_bad = document.querySelectorAll('img')[0],
     img_happy = document.querySelectorAll('img')[1];
-
-invincible_time_elm.style.top = 20 + 'px ';
-bomb_time_elm.style.top = 40 + 'px ';
 
 //音效加载
 if (confirm('是否打开音效？')) {
@@ -110,6 +108,7 @@ var player = new Player(255, 450),
     boss_maker = new Maker('boss'),
     live_res_maker = new Maker('live_res');
 player.draw();
+rank_elm.innerHTML = '排行榜<br>1<br>2<br>3<br>4<br>5';
 
 var main = function () {
     //信息面版
@@ -122,17 +121,23 @@ var main = function () {
     //BAD END
     if (player.lives < 1) {
         ispause = !ispause;
-        img_bad.style.display='block';
+        img_bad.style.display = 'block';
         audio_end_bad.play();
     }
-    //游戏关卡
+    // HAPPY END
     if (player.score >= 1000 && boss_bullets.length == 0) {
-        // HAPPY END
-        pause_elm.innerHTML = 'Rick恭喜你通关'
+        pause_elm.innerHTML = 'Rick恭喜你通关';
         ispause = !ispause;
-        img_happy.style.display='block';
+        img_happy.style.display = 'block';
         audio_end_happy.play();
-    } else if (boss_list.length == 0) {
+        axios.post(url, { //上传数据
+            username: prompt('请输入用户名：'),
+            score: player.score,
+        }).then().catch(console.log('上传失败'));
+        axios.get(url, { //请求数据
+        }).then().catch(console.log('请求失败'));
+        rank_elm.innerHTML = '排行榜<br>1<br>2<br>3<br>4<br>5';
+    } else if (boss_list.length == 0) { //关卡
         if (player.score >= 960) { stage = new Stage(6); }
         else if (player.score >= 920) { stage = new Stage(5); }
         else if (player.score >= 880) { stage = new Stage(4); }
@@ -203,7 +208,7 @@ document.onkeyup = function (e) {
         case 32: Stop = ispause ? Stop : setInterval('main()', 1000 / 60);
     }
 }
-var box = player.element;
+/* var box = player.element;
 box.onmousedown = function (e) { //拖拽事件
     var dx = box.offsetLeft - e.clientX - 10;
     var dy = box.offsetTop - e.clientY - 10;
@@ -218,6 +223,6 @@ box.onmousedown = function (e) { //拖拽事件
 document.oncontextmenu = function (e) { //右键定位
     box.style.left = e.layerX - box.offsetWidth + 'px';
     box.style.top = e.layerY - box.offsetHeight + 'px';
-    //console.log(e)
+    // console.log(e)
     return false;
-}
+} */
