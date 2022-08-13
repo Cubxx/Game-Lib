@@ -108,7 +108,6 @@ var player = new Player(255, 450),
     boss_maker = new Maker('boss'),
     live_res_maker = new Maker('live_res');
 player.draw();
-rank_elm.innerHTML = '排行榜<br>1<br>2<br>3<br>4<br>5';
 
 var main = function () {
     //信息面版
@@ -136,7 +135,6 @@ var main = function () {
         }).then().catch(console.log('上传失败'));
         axios.get(url, { //请求数据
         }).then().catch(console.log('请求失败'));
-        rank_elm.innerHTML = '排行榜<br>1<br>2<br>3<br>4<br>5';
     } else if (boss_list.length == 0) { //关卡
         if (player.score >= 960) { stage = new Stage(6); }
         else if (player.score >= 920) { stage = new Stage(5); }
@@ -179,8 +177,14 @@ var main = function () {
         player.crash(i, 5 + 2);
     })
     //暂停
-    if (ispause) { clearInterval(Stop) }
-    pause_elm.style.display = ispause ? 'block' : 'none';
+    if (ispause) {
+        clearInterval(Stop);
+        pause_elm.style.display = 'block';
+        rank_elm.innerHTML = '排行榜<br>1<br>2<br>3<br>4<br>5';
+    } else {
+        pause_elm.style.display = 'none';
+        rank_elm.innerHTML = '';
+    }
 }
 
 document.onkeydown = function (e) {
