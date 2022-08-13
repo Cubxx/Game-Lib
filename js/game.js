@@ -129,12 +129,14 @@ var main = function () {
         ispause = !ispause;
         img_happy.style.display = 'block';
         audio_end_happy.play();
-        axios.post(url, { //上传数据
-            username: prompt('请输入用户名：'),
-            score: player.score,
-        }).then().catch(console.log('上传失败'));
-        axios.get(url, { //请求数据
-        }).then().catch(console.log('请求失败'));
+        if (typeof axios != 'undefined') {
+            axios.post(url, { //上传数据
+                username: prompt('请输入用户名：'),
+                score: player.score,
+            }).then().catch(console.log('上传失败'));
+            axios.get(url, { //请求数据
+            }).then().catch(console.log('请求失败'));
+        }
     } else if (boss_list.length == 0) { //关卡
         if (player.score >= 960) { stage = new Stage(6); }
         else if (player.score >= 920) { stage = new Stage(5); }
