@@ -1,4 +1,4 @@
-[游戏链接](./game.html)
+游戏链接 https://cubxx.github.io/Game-Lib/Barrage/game.html
 
 # 游戏界面
 ![图片加载失败捏](./media/界面说明.png "来啦，来玩就知道了")

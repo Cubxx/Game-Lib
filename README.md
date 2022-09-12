@@ -4,7 +4,7 @@
 也是一个简单游戏  
 用于跳转至本库中的各类游戏网页  
 # 游戏列表
-* [Barrage](./Barrage/game.html)
+* [Barrage](./Barrage)
 * [Shoot](./ '正在新建文件夹...')
 # Bug & Requset
 留个提醒，以后再改  
