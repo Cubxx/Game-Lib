@@ -4,182 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="icon" href=".\pic\close.png">
-    <style>
-        #head {
-            height: 100px;
-            background-color: #000;
-            color: white;
-            font: bold 40px/100px 微软雅黑;
-            text-align: center;
-        }
-
-        .box{
-            float: left;
-            border: 0px solid #000;
-            background-color: rgb(191, 191, 191);
-            margin: 10px;
-        }
-
-        .title {
-            margin-top: 20px;
-            color: #000;
-            font: bold 20px/40px 微软雅黑;
-            text-align: center;
-        }
-
-        input {
-            display: block;
-            margin: 0px auto;
-            width: 160px;
-        }
-
-        .par_box {
-            position: relative;
-            border: 0px solid rgb(0, 0, 0);
-            padding: 100px;
-            margin: 10px;
-            background-color: rgb(227, 227, 227);
-        }
-
-        .cube {
-            width: 20px;
-            height: 20px;
-            background-color: #000;
-            /* color: #fff; */
-            text-align: center;
-            position: absolute;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Game Lib</title>
+    <link rel="icon" href="./close.png">
+    <link rel="stylesheet" href="./index.css">
 </head>
 
-<body style="margin: 20px;">
-    <div id="head">Lab Of Barrage</div>
-    <div class="box">
-        <div class="title"></div>
-        <input type="range" max="5" min="0" step="0.01" value="1">
-        <div class="box par_box" style="width: 0;">
-            <div class="cube">1</div>
-            <div class="cube">2</div>
-            <div class="cube">3</div>
-            <div class="cube">4</div>
+<body>
+    <div id="info" class="full">
+        <p>游戏库索引</p> <br>
+        <ul>玩法介绍
+            <li>左上角白色小方块是设置按钮</li>
+            <li>可随意拖动元素</li>
+        </ul> <br>
+        <ul>非游戏模式
+            <li>单击元素跳转至相应游戏</li>
+        </ul> <br>
+        <ul>游戏模式
+            <li>左键 - 拖动/释放</li>
+            <li>右键 - 固定</li>
+        </ul>
+    </div>
+    <div id="btn" tabindex="1"></div>
+    <div id="option" class="full">
+        <div>
+            <p>游戏模式</p>
+            <input type="button" style="
+            background-color: #fff; 
+            border-radius: 30px; 
+            width: 100px;" value="OFF"></input>
+        </div>
+        <div>
+            <p>重力系数</p>
+            <p>gravity</p> <input type="range" min="0" max="0.2" step="1e-4" value="0.05"></input>
+        </div>
+        <div>
+            <p>空气摩擦</p>
+            <p>f_air</p> <input type="range" min="0" max="1e-2" step="1e-4" value="1e-3"></input>
+        </div>
+        <div>
+            <p>地面摩擦</p>
+            <p>f_ground</p> <input type="range" min="0" max="1e-3" step="1e-5" value="1e-4"></input>
+        </div>
+        <div>
+            <p>碰撞系数</p>
+            <p>damp</p> <input type="range" min="0" max="1" step="1e-3" value="0.6"></input>
         </div>
     </div>
-    <div class="box">
-        <div class="title"></div>
-        <input type="range" max="5" min="0" step="0.01" value="1">
-        <div class="box par_box" style="width: 0;">
-            <div class="cube">1</div>
-            <div class="cube">2</div>
-            <div class="cube">3</div>
-            <div class="cube">4</div>
-        </div>
+    <div id="body" class="full">
+        <div class="unit">Barrage</div>
+        <div class="unit">Shoot</div>
+        <div class="unit">Music</div>
+        <div class="unit">Explore</div>
+        <div class="unit">abaaba</div>
+        <div class="unit">untitled</div>
     </div>
-    <div class="box">
-        <div class="title"></div>
-        <input type="range" max="5" min="0" step="0.01" value="1">
-        <div class="box par_box" style="width: 0;">
-            <div class="cube">1</div>
-            <div class="cube">2</div>
-            <div class="cube">3</div>
-            <div class="cube">4</div>
-        </div>
-    </div>
-    <div class="box">
-        <div class="title"></div>
-        <input type="range" max="5" min="0" step="0.01" value="1">
-        <div class="box par_box" style="width: 0;">
-            <div class="cube">1</div>
-            <div class="cube">2</div>
-            <div class="cube">3</div>
-            <div class="cube">4</div>
-        </div>
-    </div>
-    <a class='box par_box' href="./barrage_game.html"></a>
-
-    <script>
-        document.getElementById('head').onclick = function () { // 单击head 滑块值变化
-            for (i in document.getElementsByTagName('input')) {
-                if (Number(i) != i) { continue }
-                var spd_s = document.getElementsByTagName('input')[i].value;
-                document.getElementsByTagName('input')[i].value = spd_s == 0 ? 1 : 0;
-            }
-        }
-        for (box_i in document.getElementsByClassName('par_box')) { // 遍历par_box 分别添加动画
-            if (Number(box_i) != box_i) { continue }
-            document.getElementsByClassName('title')[box_i].innerHTML = '培养皿' + (Number(box_i) + 1) + '号';
-            var par_box = document.getElementsByClassName('par_box')[box_i];
-            for (i in par_box.children) { // i被赋值7次
-                if (Number(i) != i) { continue }
-                anima_cube(par_box.children[i], par_box, box_i);
-            }
-        }
-
-        function anima_cube(m_box, par_box, box_i) { //单个cube动画
-            var par_box_width = par_box.clientWidth - m_box.offsetWidth;
-            var par_box_height = par_box.clientHeight - m_box.offsetHeight;
-            m_box.style.left = Math.random() * par_box_width + "px";
-            m_box.style.top = Math.random() * par_box_height + "px";
-            var x = m_box.offsetLeft; var y = m_box.offsetTop; //初始位置
-            var a = Math.random() * 2;
-            var b = Math.random() * 2; //初始速度
-            switch (Number(box_i)) {
-                case 0: move_0(); break;
-                case 1: move_1(); break;
-                case 2: move_2(); break;
-                case 3: move_3(); break;
-                default: console.log("运动函数未执行 box_i=", box_i); break;
-            }
-
-            function move_0() { //帧率60
-                var spd = Number(document.getElementsByTagName('input')[box_i].value);
-                if (spd) {
-                    if (x <= 0 || x >= par_box_width) { a = -a; x = 0; }
-                    if (y <= 0 || y >= par_box_height) { b = -b; y = 0; }
-                    x += a * spd; y += b * spd;
-                    m_box.style.left = x + "px"; m_box.style.top = y + "px";
-                }
-                window.requestAnimationFrame(move_0); //形成迭代 
-            }
-            function move_1() {
-                var spd = Number(document.getElementsByTagName('input')[box_i].value);
-                if (spd) {
-                    if (x <= 0 || x >= par_box_width) { a = -a; }
-                    if (y <= 0 || y >= par_box_height) { b = -b; }
-                    x += a * spd; y += b * spd;
-                    m_box.style.left = x + "px"; m_box.style.top = y + "px";
-                }
-                window.requestAnimationFrame(move_1);
-            }
-            function move_2() {
-                var spd = Number(document.getElementsByTagName('input')[box_i].value);
-                if (spd) {
-                    b += 0.1;
-                    if (x <= 0 || x >= par_box_width) { a = -a; }
-                    if (y <= 0 || y >= par_box_height) { b = -b; b += 0.1; }
-                    x += a * spd; y += b * spd;
-                    m_box.style.left = x + "px"; m_box.style.top = y + "px";
-                }
-                window.requestAnimationFrame(move_2);
-            }
-            function move_3() {
-                var spd = Number(document.getElementsByTagName('input')[box_i].value);
-                if (spd) {
-                    if (x <= 0 || x >= par_box_width) { a = -a; }
-                    if (y <= 0 || y >= par_box_height) { b = -b; }
-                    if (y > 50 && y < 110 && x > 50 && x < 110) {
-                        if (a > 0) { x = 110 } else { x = 50 }
-                        if (b > 0) { y = 110 } else { y = 50 }
-                    }
-                    x += a * spd; y += b * spd;
-                    m_box.style.left = x + "px"; m_box.style.top = y + "px";
-                }
-                window.requestAnimationFrame(move_3);
-            }
-        }
-    </script>
+    <script src="./index.js"></script>
 </body>
 
 </html>
