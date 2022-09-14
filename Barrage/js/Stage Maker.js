@@ -1,3 +1,4 @@
+'use strict';
 function Stage(level) {
     this.level = level;
     this.boss_lives = 20;
@@ -5,7 +6,7 @@ function Stage(level) {
     this.end_conditions = false;
     this.bullet_generate = function () { }
     this.boss_generate = function () { this.end_conditions = (exe_time / 60 == 2); }
-    Array.prototype.create = function (num, code) { for (var i = 0; i < num; i++) { this[i] = eval(code) } return this; }
+    Array.prototype.create = function (num, code) { for (let i = 0; i < num; i++) { this[i] = eval(code) } return this; }
     var obj, obj_list = [];
     switch (level) {
         case 10: //beta 定向移动
@@ -23,7 +24,7 @@ function Stage(level) {
                     var p_list = [].create(4, '[Math.random() * 530, -40]'), obj_list,
                         v_list = [].create(4, '[0, Math.random()+2]');
                     obj_list = boss_maker.multi_generator(60, p_list, v_list, [], [this.boss_lives, '', [40, 40]], [], 4);
-                    for (i of obj_list) { i.fire = function () { this.generator(120, [], [0, 3], [], [], ['locate']); } }
+                    for (let i of obj_list) { i.fire = function () { this.generator(120, [], [0, 3], [], [], ['locate']); } }
                 }
                 boss_maker.generate_num == 24 ? this.blank_t++ : undefined;
                 this.end_conditions = (this.blank_t / 60 == 2);
@@ -36,7 +37,7 @@ function Stage(level) {
                     var p_list = [].create(4, '[Math.random() * 530, -40]'), obj_list,
                         v_list = [].create(4, '[Math.random() * 2-1, Math.random()+2]');
                     obj_list = boss_maker.multi_generator(60, p_list, v_list, [], [this.boss_lives, '', [40, 40]], '', 4);
-                    for (i of obj_list) { i.fire = function () { this.generator(120, [], [0, 3], [], [], ['locate']); } }
+                    for (let i of obj_list) { i.fire = function () { this.generator(120, [], [0, 3], [], [], ['locate']); } }
                 }
                 this.end_conditions = (boss_maker.generate_num == 24 && position(boss_list.slice(-1)[0].element)[1] > 200);
             }
@@ -46,7 +47,7 @@ function Stage(level) {
             this.boss_generate = function () {
                 if (boss_maker.generate_num < 6 * 11 && (boss_list.length == 0 || position(boss_list.slice(-1)[0].element)[1] > 200)) {
                     var r = parseInt(Math.random() * 10), obj;
-                    for (var o = 0; o < 1; o += 1 / 11) {
+                    for (let o = 0; o < 1; o += 1 / 11) {
                         obj = boss_maker.generator(1, [o * 530 + Math.random() * 10 + 20, - 40], [], [['gravity', 0.01, (Math.random() * 0.5 + 5)]]
                             , parseInt(o * 11) == r ? [this.boss_lives, '#ff7f00', [40, 40]] : [800, '', [40, 40]]);
                         obj.dead = function () {
@@ -95,7 +96,7 @@ function Stage(level) {
                     obj_list.push(boss_maker.generator(1, [265, -65], [-5, 0], [['circle', 300, 0], 'bigger'], [this.boss_lives / 2, '', [20, 20]]));
                     obj_list.push(boss_maker.generator(1, [570, 65], [-1.5, 6], [['toward', [265, 465], 0, '', '', () => { obj_list[1].move_type = ['circle', 200, 1] }], 'bigger'], [this.boss_lives / 2, '', [20, 20]]));
                     obj_list.push(boss_maker.generator(1, [570, 465], [-1.1, -3], [['toward', [265, 165], 0, '', '', () => { obj_list[2].move_type = ['circle', 100, 0] }], 'bigger'], [this.boss_lives, '', [40, 40]]));
-                    for (obj of obj_list) {
+                    for (let obj of obj_list) {
                         obj.fire = function () {
                             boss_list.length > 1
                                 ? this.generator(81, [], [0, 1], [['track', 60], 'bigger'], [1, '#0022ff'], ['locate'])
@@ -141,7 +142,7 @@ function Maker(obj_type) {
     this.element.style.left = '0px'; this.element.style.top = '0px'; this.element.style.width = '0px'; this.element.style.height = '0px';
     var generate_count = 0;
     var format = function (arg, res, ...n) {// str num arr
-        str_n = n[0]; num_n = n[1]; arr_n = n[2];
+        let str_n = n[0], num_n = n[1], arr_n = n[2];
         if (!arg || arg == false) { return res } else if (res instanceof Array && !(arg instanceof Array)) { throw '参数错误 Array ' + arg }
         else if (arg instanceof Array) {
             if (typeof str_n == 'number' && (!arg[str_n] || typeof arg[str_n] != 'string')) if (!arg[str_n] || arg[str_n] == false) { arg[str_n] = res[str_n] } else { throw '参数错误 String ' + arg[str_n] }
@@ -203,8 +204,8 @@ function Maker(obj_type) {
                 ring: function (num, v_rand, s_rand) {
                     generate_count += Math.PI / 30;
                     var c = generate_count;// ** 1.85;//+ Math.random() * Math.PI * 2; //相位
-                    for (var i = c; i < Math.PI * 2 + c; i += Math.PI * 2 / num) {
-                        var v_rate = Math.random() * (v_rand || 0) + 1,
+                    for (let i = c; i < Math.PI * 2 + c; i += Math.PI * 2 / num) {
+                        let v_rate = Math.random() * (v_rand || 0) + 1,
                             s_rate = Math.random() * (s_rand || 0) + 1;
                         if (s_rand) { obj_prop[2] = [size[0] * s_rate, size[1] * s_rate]; }
                         v = [v_value * v_rate * Math.cos(i + c), v_value * v_rate * Math.sin(i + c)];
@@ -234,7 +235,7 @@ function Maker(obj_type) {
         this.multi_generate_time++;
         if (this.multi_generate_time >= t_lag) {
             this.multi_generate_time = 0;
-            for (var o = 0; o < num; o++) {
+            for (let o = 0; o < num; o++) {
                 obj = obj_this.generator(1, p_list[o], v_list[o], move, obj_prop, generate);
                 obj ? obj_list.push(obj) : undefined;
             }

@@ -41,7 +41,7 @@ Bullet.prototype.move_func = function (this_obj, elm, pos_initial, v_initial, dx
                 break;
             case 'fire': libs_func =
                 function (b = false) { //player_bullet专用
-                    boss_list = update(boss_list, function () {
+                    boss_list = update(boss_list, (i) => {
                         var angle = degree(i.element, elm),
                             dis = distance(i.element, elm),
                             a = 30000 / (dis ** 2); //合加速度
@@ -54,7 +54,7 @@ Bullet.prototype.move_func = function (this_obj, elm, pos_initial, v_initial, dx
                                 dxy[1] += a * Math.sin(angle);
                             }
                         }
-                    }, function () { i.crash(this_obj); });
+                    }, (i) => { i.crash(this_obj); });
                 }
                 break;
             case 'accelerate': libs_func =
