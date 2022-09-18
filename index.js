@@ -8,11 +8,7 @@ function Unit(elm) {
     this.elm.style.left = Math.random() * (body_width - this.width) + 'px';
     this.spd = [0, 0];
     this.stop = false;
-    //url
-    switch (this.elm.innerText) {
-        case 'Barrage': this.url = './Barrage/game.html'; break;
-        default: this.url = './index.html';
-    }
+    this.url = this.elm.dataset.url || './index.html';
 }
 Unit.prototype.position = function () {
     this.left = parseFloat(window.getComputedStyle(this.elm)['left']);
