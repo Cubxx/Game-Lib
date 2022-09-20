@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -7,10 +7,259 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404</title>
     <link rel="shortcut icon" href="./close.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #622700;
+            animation: color 2s;
+        }
+
+        @keyframes color {
+            0% {
+                background-color: #fff;
+            }
+
+            100% {
+                background-color: #622700;
+            }
+        }
+
+        iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cat {
+            background-color: #0000;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .body {
+            fill: #0003;
+            opacity: 0;
+        }
+
+        .mouth {
+            fill: none;
+            stroke: #fff;
+            opacity: 0;
+        }
+
+        .eyes {
+            fill: #fff;
+            stroke: #fff;
+        }
+
+        div {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            z-index: 1;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        div>h1 {
+            color: #fffc;
+            font-size: 100px;
+        }
+
+        div>p,
+        div>a {
+            text-decoration: none;
+            color: #fffc;
+            font: 200 50px 微软雅黑;
+        }
+
+        @keyframes slide {
+            0% {
+                opacity: 0;
+                left: 48%;
+            }
+
+            100% {
+                opacity: 1;
+                left: 50%;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <script>window.open('./index.html', '_self')</script>
+    <div>
+        <h1>404 </h1>
+        <p>这里是迷途，你可以直接</p>
+        <a href="./index.html">回去</a>
+    </div>
+    <svg class="cat" xmlns="http://www.w3.org/2000/svg">
+        <path class="body" />
+        <path class="mouth" />
+        <path class="eyes" />
+        <defs>
+            <clipPath>
+                <rect></rect>
+            </clipPath>
+        </defs>
+    </svg>
+    <script>
+        Array.prototype.add = function (...arrs) { arrs.forEach(e => { this[0] += e[0], this[1] += e[1] }); return this }
+        Array.prototype.sub = function (...arrs) { arrs.forEach(e => { this[0] -= e[0], this[1] -= e[1] }); return this }
+        Array.prototype.mul = function (n) { this.forEach((e, i) => { if (!isNaN(parseFloat(e)) && isFinite(e)) this[i] *= n; else e.mul(n) }); return this }
+        var rand = Math.random,
+            norm = function (mean, std) {
+                let u = 0.0, v = 0.0, w = 0.0, c = 0.0;
+                do {
+                    u = Math.random() * 2 - 1.0;
+                    v = Math.random() * 2 - 1.0;
+                    w = u * u + v * v;
+                } while (w == 0.0 || w >= 1.0)
+                c = Math.sqrt((-2 * Math.log(w)) / w);
+                return mean + (u * c) * std;
+            }
+        var scale = window.visualViewport.height;
+        class Cat {
+            constructor(H = 0.72, eH = 70) {
+                this.scale = 1;
+                this.H = H;
+                this.eH = eH;
+                this.cat;
+                this.x = 0.228;
+                this.i;
+            }
+            draw_svg() {
+                let s = this.scale * scale, H = this.H, eH = this.eH;
+                this.cat.style.width = s + 'px', this.cat.style.height = s + 'px';
+                this.cat.style.left = this.x;
+                this.body = this.cat.getElementsByClassName('body')[0];
+                this.mouth = this.cat.getElementsByClassName('mouth')[0];
+                this.eyes = this.cat.getElementsByClassName('eyes')[0];
+                this.clip_eyes = this.cat.children[3].children[0], this.clip_eyes.id = 'eyes-clip' + this.i;
+                { //绘制计算
+                    var x1 = 0.228, y1 = 1, ix1 = 0, iy1 = 0, ox1 = -0.02, oy1 = -0.1,
+                        x2 = x1 + 0.065, y2 = y1 - H, ix2 = -0.04, iy2 = 0.1, ox2 = 0.1, oy2 = -0.08,
+                        body = [
+                            [[x1, y1], [ix1, iy1], [ox1, oy1]], //入点, 出点
+                            [[x2, y2], [ix2, iy2], [ox2, oy2]],
+                            [[x2 + 0.414, y2], [-ox2, oy2], [-ix2, iy2]],
+                            [[x1 + 0.544, y1], [-ox1, oy1], [-ix1, iy1]],
+                        ].mul(s);
+                    var ex1 = x2, ey1 = y2, eix1 = 0, eiy1 = 0, eox1 = -2 / 500, eoy1 = -3 / 500,
+                        ex2 = x2 + 0.028, ey2 = y2 - 0.114, eix2 = -0.016, eiy2 = 3 / 500, eox2 = 0.02, eoy2 = 0.002,
+                        ex3 = x2 + 0.08, ey3 = y2 - 0.055, eix3 = 0, eiy3 = -0.002, eox3 = 30 / 500, eoy3 = -15 / 500,
+                        ears = [
+                            [[ex1, ey1], [eix1, eiy1], [eox1, eoy1]],
+                            [[ex2, ey2], [eix2, eiy2], [eox2, eoy2]],
+                            [[ex3, ey3], [eix3, eiy3], [eox3, eoy3]],
+                            [[ex1 + 0.414, ey1], [-eox1, eoy1], [-eix1, eiy1]],
+                            [[ex2 + 0.358, ey2], [-eox2, eoy2], [-eix2, eiy2]],
+                            [[ex3 + 0.254, ey3], [-eox3, eoy3], [-eix3, eiy3]],
+                        ].mul(s);
+                    var mx1 = x2 + 0.207, my1 = y2 + 0.224, mix1 = 0 / 500, miy1 = 10 / 500, mox1 = mix1, moy1 = miy1,
+                        mx2 = mx1 - 0.03, my2 = my1 + 0.009, mix2 = 1 / 500, miy2 = 10 / 500, mox2 = mix2, moy2 = miy2,
+                        mouth = [
+                            [[mx1, my1], [mix1, miy1], [mox1, moy1]],
+                            [[mx2, my2], [mix2, miy2], [mox2, moy2]],
+                            [[mx2 + 0.06, my2], [-mix2, miy2], [-mox2, moy2]],
+                        ].mul(s);
+                    var lx1 = x2 + 0.164, ly1 = y2 + 0.098, lx2 = lx1 - 0.117, ly2 = ly1,
+                        rx1 = lx1 + 0.1, ry1 = ly1, rix1 = 0, riy1 = 0, rox1 = 0, roy1 = 0,
+                        rx2 = rx1 + 0.04, ry2 = ly1 + 0.06, rix2 = -12 / 500, riy2 = 0, rox2 = -rix2, roy2 = -riy2,
+                        rx3 = rx2 + 0.04, ry3 = ly1, rix3 = 0, riy3 = 0, rox3 = 0, roy3 = 0,
+                        eyes = [
+                            [[rx1, ry1], [rix1, riy1], [rox1, roy1]],
+                            [[rx2, ry2], [rix2, riy2], [rox2, roy2]],
+                            [[rx3, ry3], [rix3, riy3], [rox3, roy3]],
+                            [[rx1 - 0.114, ry1], [-rix1, riy1], [-rox1, roy1]],
+                            [[rx2 - 0.194, ry2], [-rix2, riy2], [-rox2, roy2]],
+                            [[rx3 - 0.274, ry3], [-rix3, riy3], [-rox3, roy3]],
+                            [[lx1, ly1], [lx2, ly2]],
+                            [[lx1 + 0.086, ly1], [lx2 + 0.32, ly2]],
+                        ].mul(s);
+                }
+                { //遮罩计算
+                    let str = '';
+                    this.clip_eyes.children[0].style.x = eyes[6][1][0];
+                    this.clip_eyes.children[0].style.y = eyes[6][1][1] - 10 + eH;
+                    this.clip_eyes.children[0].style.width = eyes[7][1][0] - eyes[6][1][0];
+                    this.clip_eyes.children[0].style.height = eyes[1][0][1] - eyes[0][0][1] + 20 - eH;
+                }
+                { //绘制
+                    let str = '';
+                    str += 'M' + body[0][0],
+                        str += 'C' + body[0][2].add(body[0][0]) + ',' + body[1][1].add(body[1][0]) + ',' + body[1][0],
+                        str += 'C' + ears[0][2].add(ears[0][0]) + ',' + ears[1][1].add(ears[1][0]) + ',' + ears[1][0],
+                        str += 'C' + ears[1][2].add(ears[1][0]) + ',' + ears[2][1].add(ears[2][0]) + ',' + ears[2][0],
+                        str += 'C' + ears[2][2].add(ears[2][0]) + ',' + ears[5][1].add(ears[5][0]) + ',' + ears[5][0],
+                        str += 'C' + ears[5][2].add(ears[5][0]) + ',' + ears[4][1].add(ears[4][0]) + ',' + ears[4][0],
+                        str += 'C' + ears[4][2].add(ears[4][0]) + ',' + ears[3][1].add(ears[3][0]) + ',' + ears[3][0],
+                        str += 'C' + body[2][2].add(body[2][0]) + ',' + body[3][1].add(body[3][0]) + ',' + body[3][0],
+                        str += 'C' + body[3][2].add(body[3][0]) + ',' + body[0][1].add(body[0][0]) + ',' + body[0][0],
+                        this.body.style.d = 'path("' + str + '")';
+                    str = '',
+                        str += 'M' + mouth[1][0],
+                        str += 'C' + mouth[1][2].add(mouth[1][0]) + ',' + mouth[0][1].add(mouth[0][0]) + ',' + mouth[0][0],
+                        str += 'C' + mouth[0][2].add(mouth[0][0]) + ',' + mouth[2][1].add(mouth[2][0]) + ',' + mouth[2][0],
+                        this.mouth.style.d = 'path("' + str + '")',
+                        this.mouth.style.strokeWidth = s / 250;//*/
+                    str = '',
+                        /*str += 'M' + eyes[6][0],
+                        str += 'L' + eyes[6][1],
+                        str += 'M' + eyes[7][0],
+                        str += 'L' + eyes[7][1],//*/
+                        str += 'M' + eyes[0][0],
+                        str += 'C' + eyes[0][2].add(eyes[0][0]) + ',' + eyes[1][1].add(eyes[1][0]) + ',' + eyes[1][0],
+                        str += 'C' + eyes[1][2].add(eyes[1][0]) + ',' + eyes[2][1].add(eyes[2][0]) + ',' + eyes[2][0],
+                        str += 'C' + eyes[2][2].add(eyes[2][0]) + ',' + eyes[0][1].add(eyes[0][0]) + ',' + eyes[0][0],
+                        str += 'M' + eyes[3][0],
+                        str += 'C' + eyes[3][2].add(eyes[3][0]) + ',' + eyes[4][1].add(eyes[4][0]) + ',' + eyes[4][0],
+                        str += 'C' + eyes[4][2].add(eyes[4][0]) + ',' + eyes[5][1].add(eyes[5][0]) + ',' + eyes[5][0],
+                        str += 'C' + eyes[5][2].add(eyes[5][0]) + ',' + eyes[3][1].add(eyes[3][0]) + ',' + eyes[3][0],
+                        this.eyes.style.d = 'path("' + str + '")',
+                        this.eyes.style.clipPath = 'url(#eyes-clip' + this.i + ')',
+                        this.eyes.style.strokeWidth = s / 250;//*/}
+                }
+            }
+            anime(appear = 0.5, open = 2, vanish) {
+                open = appear + 2, vanish = appear + 5;
+                let n_Anime = 0, n_eH = 0, n_H = 0, n_op = 0;
+                let stop = setInterval(() => {
+                    n_Anime++;
+                    n_Anime / 60 > appear && n_op < 100 && (this.body.style.opacity = (n_op++, n_op / 100), this.mouth.style.opacity = this.body.style.opacity);
+                    n_Anime / 60 > open && this.eH > 0 && (this.eH -= 12 / (n_eH++, n_eH));
+                    n_Anime / 60 > vanish && clearInterval(stop);
+                    this.draw_svg();
+                }, 1000 / 60);
+            }
+        }
+        var n_cats = 60, a_cat = document.getElementsByClassName('cat')[0], proto_cat = new Cat();
+        var cat_list = Array(n_cats).fill(0);
+        var _config = [];
+        cat_list.forEach((e, i) => {
+            cat_list[i] = new Cat();
+            let clone_cat = a_cat.cloneNode(true);
+            clone_cat.id = 'clone-cat-' + i;
+            cat_list[i].cat = clone_cat;
+            document.body.appendChild(clone_cat);
+            cat_list[i].i = i;
+            cat_list[i].scale = norm(0.1, 0.2);
+            cat_list[i].scale <= 0 && cat_list[i].cat.remove();
+            cat_list[i].x = rand() * (window.visualViewport.width - cat_list[i].scale * scale);
+            cat_list[i].anime(0.5 + rand() * 1);
+        })
+        proto_cat.cat = a_cat, proto_cat.draw_svg(), proto_cat.body.style.fill = '#0009', proto_cat.anime(2);
+        var stop = setInterval(() => {
+            proto_cat.eH <= 10 && (document.body.children[0].style.display = 'flex', document.body.children[0].style.animation = 'slide 2s ease-out', clearInterval(stop))
+        }, 500)
+    </script>
 </body>
 
 </html>
